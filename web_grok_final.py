@@ -1,5 +1,3 @@
-import streamlit as st
-import ollama
 import pandas as pd
 from docx import Document
 from pptx import Presentation
