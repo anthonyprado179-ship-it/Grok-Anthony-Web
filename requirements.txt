@@ -6,3 +6,5 @@ python-pptx
 beautifulsoup4
 yt-dlp
 xlsxwriter
+lxml
+cssselect
