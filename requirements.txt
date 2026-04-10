@@ -1,10 +1,4 @@
 streamlit
-requests
-pandas
-python-docx
-python-pptx
-beautifulsoup4
-yt-dlp
-xlsxwriter
 google-generativeai
-lxml
+requests
+beautifulsoup4
