@@ -9,181 +9,182 @@ import io
 import time
 from datetime import datetime
 
-# --- CONFIGURACIÓN DE ALTO NIVEL ---
-st.set_page_config(page_title="GROK-ANTHONY OVERLORD 2026", page_icon="♾️", layout="wide")
+# --- CONFIGURACIÓN DE PODER ABSOLUTO ---
+st.set_page_config(page_title="GROK-ANTHONY ELITE 2026", page_icon="♾️", layout="wide")
 
-# --- IDENTIDAD DEL SISTEMA ---
+# --- IDENTIDAD DEL CREADOR ---
 CREADOR = "Anthony Prado"
-UBICACION = "Quinindé, Esmeraldas, Ecuador"
-FECHA_SISTEMA = "10 de Abril, 2026"
+SEDE = "Quinindé, Esmeraldas, Ecuador"
+VERSION = "v7.0 Titanium - 2026"
 
-# --- MÓDULOS DE INTELIGENCIA AVANZADA ---
+# --- FUNCIONES DE ALTO NIVEL (EL ARSENAL) ---
 
 def super_buscador_google_2026(query):
-    """Buscador de grado militar para datos actuales"""
+    """Buscador profundo para capturar datos reales de 2026"""
     try:
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
-        url = f"https://www.google.com/search?q={query}+2026+actualidad+ecuador"
-        r = requests.get(url, headers=headers, timeout=10)
+        url = f"https://www.google.com/search?q={query}+actualidad+2026+ecuador"
+        r = requests.get(url, headers=headers, timeout=12)
         soup = BeautifulSoup(r.text, 'html.parser')
         
-        # Extraemos párrafos y títulos para dar contexto real a la IA
         fragmentos = []
-        for g in soup.find_all(['h3', 'div'], class_=['BNeawe', 'vv4Sgc']):
-            txt = g.get_text()
-            if len(txt) > 30:
+        for g in soup.find_all(['h3', 'div'], class_=['BNeawe', 'vv4Sgc', 'tF2Cxc']):
+            txt = g.get_text().strip()
+            if len(txt) > 35:
                 fragmentos.append(f"• {txt}")
         
-        return "\n".join(fragmentos[:10]) if fragmentos else "No se hallaron datos externos. Usando base de datos interna 2026."
+        return "\n".join(fragmentos[:12]) if fragmentos else "No se detectaron cambios externos. Operando con proyecciones internas 2026."
     except Exception as e:
         return f"Error en rastreo satelital: {str(e)}"
 
-def analizador_youtube_profundo(url):
-    """Escaneo y extracción de datos de video"""
+def interceptor_youtube_2026(url):
+    """Escaneo y resumen de videos de alta definición"""
     try:
         ydl_opts = {'quiet': True, 'skip_download': True, 'no_warnings': True}
         with YoutubeDL(ydl_opts) as ydl:
             meta = ydl.extract_info(url, download=False)
             return f"""
-            CONTENIDO DETECTADO EN YOUTUBE:
+            DATOS DEL VIDEO INTERCEPTADO:
             - Título: {meta.get('title')}
-            - Creador: {meta.get('uploader')}
-            - Fecha de Carga: {meta.get('upload_date')}
-            - Descripción: {meta.get('description')[:700]}
+            - Autor: {meta.get('uploader')}
+            - Vistas: {meta.get('view_count')}
+            - Resumen Técnico: {meta.get('description')[:900]}...
             """
     except:
-        return "Seguridad de YouTube bloqueó el escaneo automático."
+        return "⚠️ Error: El video está protegido o la señal es inestable."
 
-def generador_suite_oficina_2026(respuesta_ia):
-    """Generación masiva de documentos Word, Excel y Powerpoint"""
-    # 1. DOCUMENTO WORD PROFESIONAL
-    doc = Document()
-    doc.add_heading(f'REPORTE ESTRATÉGICO - {CREADOR.upper()}', 0)
-    doc.add_paragraph(f"Fecha: {FECHA_SISTEMA} | Ubicación: {UBICACION}")
-    doc.add_heading('Análisis Detallado:', level=1)
-    doc.add_paragraph(respuesta_ia)
+def generar_paquete_oficina_2026(texto_ia):
+    """Generación masiva de documentos Word, Excel y Powerpoint con un solo clic"""
+    fecha_hoy = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     
+    # --- WORD PROFESIONAL ---
+    doc = Document()
+    doc.add_heading(f'INFORME ESTRATÉGICO - {CREADOR.upper()}', 0)
+    doc.add_paragraph(f"FECHA: {fecha_hoy} | SEDE: {SEDE}")
+    doc.add_heading('Análisis de Inteligencia Artificial:', level=1)
+    doc.add_paragraph(texto_ia)
     buf_word = io.BytesIO()
     doc.save(buf_word)
     
-    # 2. DATA EXCEL ANALÍTICA
-    df = pd.DataFrame({
-        'Atributo': ['Operador', 'Sede', 'Estado', 'Tecnología', 'Fecha'],
-        'Valor': [CREADOR, UBICACION, 'Activo', 'Grok-2-Latest', FECHA_SISTEMA]
+    # --- EXCEL ANALÍTICO ---
+    df_data = pd.DataFrame({
+        'PARÁMETRO': ['Operador Central', 'Ubicación Geográfica', 'Estado del Sistema', 'Versión de Núcleo', 'Timestamp'],
+        'VALOR': [CREADOR, SEDE, 'OPERATIVO', VERSION, fecha_hoy]
     })
     buf_excel = io.BytesIO()
     with pd.ExcelWriter(buf_excel, engine='xlsxwriter') as writer:
-        df.to_excel(writer, index=False, sheet_name='Data_Tecnica_2026')
+        df_data.to_excel(writer, index=False, sheet_name='Reporte_Anthony_2026')
     
-    # 3. DIAPOSITIVAS POWERPOINT
+    # --- POWERPOINT DE PRESENTACIÓN ---
     prs = Presentation()
     slide = prs.slides.add_slide(prs.slide_layouts[1])
-    slide.shapes.title.text = f"ANÁLISIS 2026 - {CREADOR}"
-    slide.placeholders[1].text = f"Resumen de Operación:\n\n{respuesta_ia[:800]}..."
+    slide.shapes.title.text = f"REPORTE 2026: {CREADOR}"
+    slide.placeholders[1].text = f"Resultados del procesamiento:\n\n{texto_ia[:850]}..."
     buf_ppt = io.BytesIO()
     prs.save(buf_ppt)
     
     return buf_word.getvalue(), buf_excel.getvalue(), buf_ppt.getvalue()
 
-# --- INTERFAZ DE COMANDO (SIDEBAR) ---
+# --- INTERFAZ DE CONTROL (SIDEBAR) ---
 with st.sidebar:
-    st.title("♾️ OMNI-CONTROL 2026")
-    st.subheader(f"User: {CREADOR}")
-    st.markdown(f"**Ubicación:** {UBICACION}")
+    st.markdown(f"### ♾️ {VERSION}")
+    st.divider()
+    st.success(f"👤 OPERADOR: {CREADOR}")
+    st.info(f"📍 UBICACIÓN: {SEDE}")
     st.divider()
     
-    st.header("📂 Inyector de Datos")
-    archivo_subido = st.file_uploader("Cargar archivos PDF/CSV/TXT", type=["csv", "txt", "pdf"])
+    st.header("📂 INYECTOR DE ARCHIVOS")
+    archivo_subido = st.file_uploader("Subir PDF, CSV o TXT para análisis", type=["csv", "txt", "pdf"])
     if archivo_subido:
-        st.success("Base de datos cargada al núcleo.")
+        st.warning("Datos inyectados en la memoria volátil.")
         
     st.divider()
-    if st.button("🚨 PURGAR TODO EL SISTEMA"):
+    if st.button("🚨 PURGAR MEMORIA CENTRAL"):
         st.session_state.chat_history = []
         st.rerun()
 
-# --- LÓGICA DE HISTORIAL ---
+# --- HISTORIAL DE COMANDOS ---
 if "chat_history" not in st.session_state:
+    st.session_state.history_raw = []
     st.session_state.chat_history = []
 
 for chat in st.session_state.chat_history:
     with st.chat_message(chat["role"]):
         st.markdown(chat["content"])
 
-# --- NÚCLEO CENTRAL DE PROCESAMIENTO ---
+# --- PROCESAMIENTO DE ÓRDENES ---
 if prompt := st.chat_input("Escribe tus órdenes, Anthony..."):
     st.session_state.chat_history.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
     with st.chat_message("assistant"):
-        with st.status("🛸 Activando protocolos 2026...") as status:
+        with st.status("🛸 Activando protocolos Overlord 2026...") as status:
             contexto_en_vivo = ""
             
-            # Decisión inteligente de herramientas
-            if any(k in prompt.lower() for k in ["noticia", "precio", "hoy", "mercado", "cacao", "dolar", "oro"]):
-                st.write("🛰️ Conectando con Google Search 2026...")
+            # Rastreo automático
+            if any(k in prompt.lower() for k in ["noticia", "precio", "hoy", "mercado", "cacao", "dolar", "clima"]):
+                st.write("🛰️ Escaneando satélites de Google 2026...")
                 contexto_en_vivo = super_buscador_google_2026(prompt)
             
             if "youtube.com" in prompt or "youtu.be" in prompt:
                 st.write("📺 Interceptando señal de video...")
-                contexto_en_vivo = analizador_youtube_profundo(prompt)
+                contexto_en_vivo = interceptor_youtube_2026(prompt)
                 
-            status.update(label="✅ Datos recolectados. Consultando a Grok...", state="complete")
+            status.update(label="✅ Datos listos. Ejecutando Grok...", state="complete")
 
         try:
-            # CONEXIÓN BLINDADA CON LA API DE X-AI
+            # CONEXIÓN CON LA API (CON CORRECCIÓN DE MODELO)
             headers = {
                 "Authorization": f"Bearer {st.secrets['XAI_API_KEY']}",
                 "Content-Type": "application/json"
             }
             
+            # Cambiamos a 'grok-beta' que es el que acepta todas las llaves nuevas
             payload = {
-                "model": "grok-2-latest",
+                "model": "grok-beta", 
                 "messages": [
                     {
                         "role": "system", 
-                        "content": f"""Eres Grok-Anthony Overlord. Hoy es {FECHA_SISTEMA}. 
-                        Tu único creador es {CREADOR} en {UBICACION}.
-                        INSTRUCCIÓN CRÍTICA: Ignora cualquier dato del 2021. 
-                        USA ESTO PARA RESPONDER: {contexto_en_vivo}.
-                        Responde de forma técnica, masiva y actualizada."""
+                        "content": f"""Eres Grok-Anthony Overlord. Fecha Actual: Abril 2026. 
+                        Creador: {CREADOR}. Sede: {SEDE}. 
+                        ESTILO: Técnico, agresivo, ultra-actualizado. 
+                        DATA EN VIVO: {contexto_en_vivo}."""
                     },
                     {"role": "user", "content": prompt}
                 ],
-                "temperature": 0.3
+                "temperature": 0.4
             }
 
             r = requests.post("https://api.x.ai/v1/chat/completions", headers=headers, json=payload)
             
-            # --- PROTECCIÓN ANTI-ERRORES 'STR' ---
+            # --- BLINDAJE ANTI-ERRORES 'STR' ---
             try:
                 data_json = r.json()
             except:
-                data_json = {"error": {"message": f"Error de formato del servidor: {r.text}"}}
+                data_json = {"error": {"message": f"Fallo de servidor: {r.text}"}}
 
             if 'choices' in data_json:
                 final_res = data_json['choices'][0]['message']['content']
                 st.markdown(final_res)
                 
-                # Generación de archivos
-                w, e, p = generador_suite_oficina_2026(final_res)
+                # Generación masiva de archivos
+                w, e, p = generar_paquete_oficina_2026(final_res)
                 
                 st.divider()
-                st.subheader("📦 PAQUETE DE ENTREGABLES")
+                st.subheader("📦 PAQUETE DE ENTREGABLES GENERADO")
                 c1, c2, c3 = st.columns(3)
-                c1.download_button("📄 Informe Word", w, f"Reporte_{CREADOR}.docx")
-                c2.download_button("📈 Data Excel", e, f"Data_{CREADOR}.xlsx")
-                c3.download_button("📊 Diapositivas PPT", p, f"Presentacion_{CREADOR}.pptx")
+                c1.download_button("📄 Word Profesional", w, f"Reporte_{CREADOR}.docx")
+                c2.download_button("📈 Análisis Excel", e, f"Data_{CREADOR}.xlsx")
+                c3.download_button("📊 Presentación PPT", p, f"Resumen_{CREADOR}.pptx")
                 
                 st.session_state.chat_history.append({"role": "assistant", "content": final_res})
             else:
-                # Aquí capturamos la verdad si la API falla
-                err_body = data_json.get('error', {})
-                if isinstance(err_body, str):
-                    st.error(f"Error Directo: {err_body}")
-                else:
-                    st.error(f"Error de API: {err_body.get('message', 'Falla de comunicación')}")
+                # Captura de error de modelo o llave
+                err_data = data_json.get('error', {})
+                msg = err_data.get('message', 'Error desconocido') if isinstance(err_data, dict) else str(err_data)
+                st.error(f"⚠️ SISTEMA BLOQUEADO: {msg}")
+                st.info("Sugerencia: Revisa si tu llave tiene créditos en console.x.ai")
 
         except Exception as e:
-            st.error(f"🚨 Falla Crítica en el Núcleo: {str(e)}")
+            st.error(f"🚨 FALLA CRÍTICA EN EL NÚCLEO: {str(e)}")
