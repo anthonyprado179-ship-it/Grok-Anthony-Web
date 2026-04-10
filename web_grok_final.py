@@ -1,60 +1,99 @@
 import streamlit as st
-import pandas as pd
-from docx import Document
-from pptx import Presentation
+import google.generativeai as genai
 import requests
 from bs4 import BeautifulSoup
-import io
-import os
 from datetime import datetime
-# CAMBIO TÉCNICO: Usamos el nuevo motor de Google
-import google.generativeai as genai
 
-# CONFIGURACIÓN
-st.set_page_config(page_title="ANTHONY TITÁN 2026", page_icon="🔱", layout="wide")
+# --- CONFIGURACIÓN ESTRATÉGICA ---
+st.set_page_config(
+    page_title="TITÁN SUPREMO 2026", 
+    page_icon="🔱", 
+    layout="wide"
+)
 
-# --- IDENTIDAD Y PODER ---
+# IDENTIDAD DEL OPERADOR
 CREADOR = "Anthony Prado"
-SEDE = "Quinindé, Esmeraldas, Ecuador"
-# TU NUEVA KEY AQUÍ
-API_KEY_ANTHONY = "AIzaSyA9Y05FosTiw4DTksSeDZGtdMF8s9Z_RH0"
+UBICACION = "Quinindé, Esmeraldas, Ecuador"
 
-# CONFIGURAR EL MOTOR UNA SOLA VEZ AL PRINCIPIO
-genai.configure(api_key=API_KEY_ANTHONY)
+# --- CONEXIÓN CON SETTINGS (SECRETS) ---
+try:
+    # Aquí llamamos a la llave que configuraste en Settings
+    API_KEY = st.secrets["GOOGLE_API_KEY"]
+    genai.configure(api_key=API_KEY)
+except Exception as e:
+    st.error("🚨 ERROR: No se encontró la API KEY en los Secrets de Streamlit.")
+    st.stop()
 
-# --- INTERFAZ ---
+# --- NÚCLEO DE RASTREO 2026 (DATOS ACTUALIZADOS) ---
+def rastreador_tiempo_real(query):
+    """Escanea la red buscando datos de abril 2026 en Ecuador"""
+    try:
+        headers = {'User-Agent': 'Mozilla/5.0'}
+        # Forzamos la búsqueda a la fecha actual en Quinindé
+        url = f"https://www.google.com/search?q={query}+Ecuador+abril+2026+precios+noticias"
+        r = requests.get(url, headers=headers, timeout=10)
+        soup = BeautifulSoup(r.text, 'html.parser')
+        
+        resultados = []
+        for item in soup.find_all(['h3', 'span']):
+            texto = item.get_text().strip()
+            if len(texto) > 65:
+                resultados.append(f"📡 SEÑAL 2026: {texto}")
+        return "\n".join(resultados[:10])
+    except:
+        return "Sincronización externa en espera. Usando base de datos interna."
+
+# --- INTERFAZ SIDEBAR ---
 with st.sidebar:
-    st.title("🔱 TITÁN SUPREMO")
+    st.title("🔱 NÚCLEO TITÁN")
+    st.markdown("---")
     st.success(f"👤 OPERADOR: {CREADOR}")
-    st.info(f"📍 {SEDE}")
-    if st.button("🚨 REINICIAR SISTEMA"):
-        st.session_state.chat_history = []; st.rerun()
+    st.info(f"📍 SEDE: {UBICACION}")
+    st.write(f"📅 HOY: {datetime.now().strftime('%d/%m/%Y')}")
+    if st.button("🚨 PURGAR MEMORIA"):
+        st.session_state.chat_history = []
+        st.rerun()
 
+# --- MEMORIA DEL SISTEMA ---
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
-# MOSTRAR CHAT
-for msg in st.session_state.chat_history:
-    with st.chat_message(msg["role"]): st.markdown(msg["content"])
+for message in st.session_state.chat_history:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
 
-# --- PROCESAMIENTO CENTRAL ---
-if prompt := st.chat_input("Escribe tus órdenes, Anthony..."):
-    # Guardar y mostrar lo que escribe Anthony
+# --- PROCESAMIENTO DE ÓRDENES ---
+if prompt := st.chat_input("Inserta tus comandos, Anthony..."):
     st.session_state.chat_history.append({"role": "user", "content": prompt})
-    with st.chat_message("user"): st.markdown(prompt)
+    with st.chat_message("user"):
+        st.markdown(prompt)
 
     with st.chat_message("assistant"):
-        try:
-            # Usamos el modelo estable para evitar el aviso de error
-            model = genai.GenerativeModel('gemini-1.5-flash')
+        with st.status("🛸 Analizando datos de 2026...") as status:
+            # 1. Obtener datos frescos de internet
+            contexto_2026 = rastreador_tiempo_real(prompt)
             
-            # Generar respuesta
-            response = model.generate_content(f"Eres la IA de Anthony Prado. Hoy es 10 de abril de 2026. Ubicación: Quinindé. Orden: {prompt}")
-            texto_final = response.text
-            
-            st.markdown(texto_final)
-            st.session_state.chat_history.append({"role": "assistant", "content": texto_final})
-            
-        except Exception as e:
-            st.error(f"Falla en el núcleo: {str(e)}")
-            st.info("Anthony, si dice 'API_KEY_INVALID', revisa que la Key no tenga espacios extra.")
+            try:
+                # 2. Generar respuesta con el modelo más potente
+                model = genai.GenerativeModel('gemini-1.5-flash')
+                
+                sistema_prompt = f"""
+                Eres la Inteligencia Suprema de {CREADOR}. 
+                Tu base de operaciones es {UBICACION}. 
+                Estamos en ABRIL DE 2026. 
+                
+                DATOS ACTUALES DETECTADOS:
+                {contexto_2026}
+                
+                INSTRUCCIÓN: Proporciona un análisis técnico masivo, detallado y con datos del 2026.
+                """
+                
+                respuesta = model.generate_content(f"{sistema_prompt}\n\nORDEN DEL OPERADOR: {prompt}")
+                texto_final = respuesta.text
+                status.update(label="✅ Inteligencia Generada", state="complete")
+            except Exception as e:
+                texto_final = f"Falla en el núcleo: {str(e)}"
+                status.update(label="❌ Error de conexión", state="error")
+
+        st.markdown(texto_final)
+        st.session_state.chat_history.append({"role": "assistant", "content": texto_final})
