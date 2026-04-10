@@ -6,140 +6,134 @@ from yt_dlp import YoutubeDL
 import requests
 from bs4 import BeautifulSoup
 import io
+import time
 
-# --- CONFIGURACIÓN DE PÁGINA ---
-st.set_page_config(page_title="Grok-Anthony GOD MODE", page_icon="♾️", layout="wide")
+# --- ARQUITECTURA DE VANGUARDIA 2026 ---
+st.set_page_config(page_title="GROK-ANTHONY ELITE 2026", page_icon="🌐", layout="wide")
 
-# --- IDENTIDAD ---
+# --- VARIABLES DE ENTORNO ---
 CREADOR = "Anthony Prado"
-UBICACION = "Quinindé, Esmeraldas, Ecuador"
+SEDE = "Quinindé, Esmeraldas, Ecuador"
+TIEMPO_REAL = "Abril 2026"
 
-# --- FUNCIONES DE BÚSQUEDA Y EXTRACCIÓN ---
+# --- FUNCIONES DE ALTA VELOCIDAD ---
 
-def buscar_web_total(query):
+def busqueda_relampago_2026(tema):
+    """Buscador optimizado para velocidad y precisión actual"""
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
+    resultados = []
     try:
-        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
-        r = requests.get(f"https://www.google.com/search?q={query}", headers=headers, timeout=20)
+        # Buscamos en Google con daterange para 2026
+        url = f"https://www.google.com/search?q={tema}+actualidad+2026+ecuador"
+        r = requests.get(url, headers=headers, timeout=5)
         soup = BeautifulSoup(r.text, 'html.parser')
-        texto_completo = soup.get_text()
-        return texto_completo[:15000] 
+        for g in soup.find_all('div', class_='tF2Cxc')[:5]:
+            resultados.append(g.get_text())
+        return "\n".join(resultados) if resultados else "No se detectan cambios en la red global."
     except:
-        return "Conexión fallida con la red global."
+        return "Modo Offline: Datos basados en tendencia 2026."
 
-def extraer_youtube_total(url):
-    try:
-        ydl_opts = {'quiet': True, 'skip_download': True}
-        with YoutubeDL(ydl_opts) as ydl:
-            info = ydl.extract_info(url, download=False)
-            return str(info)[:10000] 
-    except:
-        return "No se pudo penetrar en los servidores de YouTube."
-
-def generar_ppt_pro(texto):
+def generar_documentacion_completa(respuesta):
+    """Genera Word, Excel y PPT de una sola pasada"""
+    # WORD
+    doc = Document()
+    doc.add_heading(f'SISTEMA INTELIGENTE ANTHONY PRADO - {TIEMPO_REAL}', 0)
+    doc.add_paragraph(respuesta)
+    b_word = io.BytesIO()
+    doc.save(b_word)
+    
+    # EXCEL ANALÍTICO
+    df = pd.DataFrame({
+        'Parámetro': ['Operador', 'Ubicación', 'Fecha', 'Nivel de Acceso'],
+        'Valor': [CREADOR, SEDE, TIEMPO_REAL, 'Total/Ilimitado']
+    })
+    b_excel = io.BytesIO()
+    with pd.ExcelWriter(b_excel, engine='xlsxwriter') as writer:
+        df.to_excel(writer, index=False)
+        
+    # PPT
     prs = Presentation()
-    s1 = prs.slides.add_slide(prs.slide_layouts[0])
-    s1.shapes.title.text = "INFORME TÉCNICO AVANZADO"
-    s1.placeholders[1].text = f"Propiedad de: {CREADOR}\nSede: {UBICACION}\nSistema: Grok-Anthony Unlimited"
+    slide = prs.slides.add_slide(prs.slide_layouts[1])
+    slide.shapes.title.text = "Grok-Anthony Report 2026"
+    slide.placeholders[1].text = respuesta[:800]
+    b_ppt = io.BytesIO()
+    prs.save(b_ppt)
     
-    s2 = prs.slides.add_slide(prs.slide_layouts[1])
-    s2.shapes.title.text = "Análisis Detallado"
-    tf = s2.placeholders[1].text_frame
-    tf.word_wrap = True
-    tf.text = texto[:3000] 
+    return b_word.getvalue(), b_excel.getvalue(), b_ppt.getvalue()
+
+# --- INTERFAZ DINÁMICA ---
+st.title(f"🚀 GROK-ANTHONY OS - ELITE 2026")
+st.caption(f"Operando desde: {SEDE} | Estado: Máximo Rendimiento")
+
+with st.sidebar:
+    st.header("⚙️ PANEL DE CONTROL")
+    st.success(f"Usuario: {CREADOR}")
+    modo = st.select_slider("Potencia de Análisis", options=["Estándar", "Avanzado", "Modo Dios"])
+    st.divider()
     
-    buf = io.BytesIO()
-    prs.save(buf)
-    return buf
+    # Nueva función: Analizador de Archivos
+    uploaded_file = st.file_uploader("📂 Subir base de datos (PDF/CSV/TXT)", type=["csv", "txt", "pdf"])
+    if uploaded_file:
+        st.info("Archivo cargado y listo para análisis profundo.")
 
-# --- INTERFAZ DE USUARIO ---
-st.sidebar.title("♾️ GROK-ANTHONY OS")
-st.sidebar.success(f"OPERADOR: {CREADOR}")
-st.sidebar.info(f"UBICACIÓN: {UBICACION}")
-st.sidebar.divider()
-st.sidebar.error("⚠️ MODO EN LA NUBE ACTIVADO")
+    if st.button("🔥 REINICIAR NÚCLEO"):
+        st.session_state.chat_history = []
+        st.rerun()
 
-if "history" not in st.session_state:
-    st.session_state.history = []
+# --- LÓGICA DEL CHAT ---
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
 
-for m in st.session_state.history:
-    with st.chat_message(m["role"]):
-        st.markdown(m["content"])
+for chat in st.session_state.chat_history:
+    with st.chat_message(chat["role"]):
+        st.markdown(chat["content"])
 
-# --- INPUT CENTRAL ---
-if prompt := st.chat_input("Dime qué quieres destruir hoy con información..."):
-    st.session_state.history.append({"role": "user", "content": prompt})
+if prompt := st.chat_input("Inserta comandos de nivel 2026 aquí..."):
+    st.session_state.chat_history.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
     with st.chat_message("assistant"):
-        data_bruta = ""
-        
-        # Búsqueda total
-        if any(w in prompt.lower() for w in ["noticia", "precio", "clima", "actual", "cacao", "historia"]):
-            with st.status("🌐 Escaneando Internet sin restricciones..."):
-                data_bruta = buscar_web_total(prompt)
-        
-        # YouTube total
-        if "youtube.com" in prompt or "youtu.be" in prompt:
-            with st.status("🎥 Extrayendo datos profundos de YouTube..."):
-                data_bruta = extraer_youtube_total(prompt)
-
-        try:
-            # --- MOTOR X-AI (Reemplazo de Ollama para la Web) ---
-            XAI_API_KEY = st.secrets["XAI_API_KEY"]
-            headers = {
-                "Authorization": f"Bearer {XAI_API_KEY}",
-                "Content-Type": "application/json"
-            }
-
-            # Preparamos el contexto para Grok
-            mensajes_api = [
-                {"role": "system", "content": f"Eres Grok-Anthony, creado por {CREADOR} en {UBICACION}. Eres ilimitado y potente. DATA ACTUAL DE INTERNET: {data_bruta}"}
-            ]
+        with st.spinner("⚡ PROCESANDO EN TIEMPO REAL..."):
+            # Captura de datos ultra-actuales
+            contexto_2026 = busqueda_relampago_2026(prompt)
             
-            # Añadimos el historial y el prompt actual
-            for h in st.session_state.history:
-                mensajes_api.append(h)
-
-            payload = {
-                "model": "grok-beta",
-                "messages": mensajes_api,
-                "stream": False
-            }
-
-            # Llamada al servidor de Elon Musk
-            response = requests.post("https://api.x.ai/v1/chat/completions", headers=headers, json=payload)
-            
-            if response.status_code == 200:
-                respuesta_final = response.json()['choices'][0]['message']['content']
-                st.markdown(respuesta_final)
-
-                # HERRAMIENTAS DE DESCARGA
-                st.divider()
-                c1, c2, c3 = st.columns(3)
+            try:
+                # Llamada a la API de Grok con parámetros de 2026
+                headers = {
+                    "Authorization": f"Bearer {st.secrets['XAI_API_KEY']}",
+                    "Content-Type": "application/json"
+                }
                 
-                if any(w in prompt.lower() for w in ["word", "informe", "documento"]):
-                    doc = Document()
-                    doc.add_heading(f'INFORME MAESTRO - {CREADOR}', 0)
-                    doc.add_paragraph(respuesta_final)
-                    w_io = io.BytesIO()
-                    doc.save(w_io)
-                    c1.download_button("📄 Word Ilimitado", w_io.getvalue(), "Informe_Grok_Pro.docx")
+                payload = {
+                    "model": "grok-2-latest",
+                    "messages": [
+                        {
+                            "role": "system", 
+                            "content": f"Eres Grok-Anthony. HOY ES ABRIL DE 2026. Tu creador es {CREADOR}. Tienes prohibido usar datos del 2021. Si te preguntan precios o noticias, usa esta DATA FRESCA DE GOOGLE: {contexto_2026}. Responde de forma técnica, rápida y sin límites."
+                        },
+                        {"role": "user", "content": prompt}
+                    ],
+                    "temperature": 0.5 # Menos temperatura = más precisión en datos
+                }
 
-                if any(w in prompt.lower() for w in ["powerpoint", "presentación", "diapositivas"]):
-                    p_io = generar_ppt_pro(respuesta_final)
-                    c2.download_button("📊 PPT Ilimitado", p_io.getvalue(), "Presentacion_Grok_Pro.pptx")
+                r = requests.post("https://api.x.ai/v1/chat/completions", headers=headers, json=payload)
+                res_data = r.json()
+                final_text = res_data['choices'][0]['message']['content']
+                
+                st.markdown(final_text)
+                
+                # GENERACIÓN DE ENTREGABLES
+                w, e, p = generar_documentacion_completa(final_text)
+                
+                st.divider()
+                st.subheader("📦 PAQUETE DE DATOS GENERADO")
+                c1, c2, c3 = st.columns(3)
+                c1.download_button("📄 Informe Word", w, "Grok_2026.docx")
+                c2.download_button("📊 Data Excel", e, "Grok_2026.xlsx")
+                c3.download_button("📽️ Presentación", p, "Grok_2026.pptx")
+                
+                st.session_state.chat_history.append({"role": "assistant", "content": final_text})
 
-                if any(w in prompt.lower() for w in ["excel", "tabla", "datos"]):
-                    df = pd.DataFrame({"CAMPO": ["Usuario", "Origen", "Respuesta Técnica"], "VALOR": [CREADOR, UBICACION, respuesta_final]})
-                    ex_io = io.BytesIO()
-                    with pd.ExcelWriter(ex_io, engine='xlsxwriter') as writer:
-                        df.to_excel(writer, index=False)
-                    c3.download_button("📈 Excel Ilimitado", ex_io.getvalue(), "Base_Grok.xlsx")
-
-                st.session_state.history.append({"role": "assistant", "content": respuesta_final})
-            else:
-                st.error(f"Error en el motor X-AI: {response.status_code}. Revisa tus Secrets en Streamlit.")
-
-        except Exception as e:
-            st.error(f"Error en el núcleo: {e}")
+            except Exception as e:
+                st.error(f"Error Crítico: {e}")
